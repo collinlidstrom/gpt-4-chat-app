@@ -1,12 +1,13 @@
 import { Configuration, OpenAIApi } from "openai";
 
-const apiKey = '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';
-const openai = new OpenAIApi(new Configuration({ apiKey }));
-
 export const getCompletion = async (input) => {
-  const completion = await openai.createChatCompletion({
+  console.log(`\nretrieving environment variables...`)
+  const openai = new OpenAIApi(new Configuration({ apiKey: process.env.REACT_APP_GPT_API_KEY }));
+  console.log(`process.env.REACT_APP_GPT_API_KEY: ${process.env.REACT_APP_GPT_API_KEY}\n`)
+  const { data } = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [{ role: "user", content: input }],
   });
-  return completion.data.choices.map(choice => choice.message.content);
+
+  return data.choices.map(({ message }) => message.content);
 };
