@@ -1,34 +1,21 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import '../src/App.css';
+import Header from './components/Header';
+import { getCompletion } from './api';
+import { Button, Container, Form, Table } from 'react-bootstrap';
 
 const App = () => {
   const [input, setInput] = useState('');
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState([]);
 
-  const handleChange = (event) => {
-    setInput(event.target.value);
-  };
+  const handleChange = (e) => setInput(e.target.value);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const result = await axios.post(
-        'https://api.openai.com/v1/engines/davinci-codex/completions',
-        {
-          prompt: input,
-          max_tokens: 100,
-          n: 1,
-          stop: null,
-          temperature: 1.0,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
-          },
-        },
-      );
-      setResponse(result.data.choices[0].text);
+      const messages = await getCompletion(input);
+      setResponse(prevResponse => prevResponse.concat(messages));
+      setInput('');
     } catch (error) {
       console.error('Error fetching response:', error);
     }
@@ -36,25 +23,31 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>GPT-4 Chat App</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="input">
-          Enter your prompt:
-          <input
-            type="text"
-            id="input"
-            value={input}
-            onChange={handleChange}
-          />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      {response && (
-        <div>
-          <h2>Response:</h2>
-          <p>{response}</p>
-        </div>
-      )}
+      <Container>
+        <Header />
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="input">
+            <Form.Label>Enter your prompt:</Form.Label>
+            <Form.Control
+              type="text"
+              value={input}
+              onChange={handleChange}
+            />
+            <Button type="submit">Submit</Button>
+          </Form.Group>
+        </Form>
+      </Container>
+      <Table striped bordered>
+        <tbody>
+          {response.map((message, index) => (
+            <tr key={index}>
+              <td>
+                <pre><code>{message}</code></pre>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 };

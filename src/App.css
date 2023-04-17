@@ -32,23 +32,85 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
 .spinner {
-    animation: spin infinite 5s linear;
+  animation: spin infinite 5s linear;
 
-    /*You can increase or decrease the timer (5s) to
+  /*You can increase or decrease the timer (5s) to
      increase or decrease the speed of the spinner*/
-  }
+}
 
 @keyframes spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Default styles */
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Dark theme styles */
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark h1 {
+  color: #ffffff;
+}
+
+body.dark p {
+  color: #ffffff;
+}
+
+/* Button styles */
+button {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+button:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Dark mode icon styles */
+.icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  background-image: url("https://img.icons8.com/ios-filled/50/ffffff/moon-symbol.png");
+  background-size: contain;
+}
+
+body.dark .icon {
+  background-image: url("https://img.icons8.com/ios-filled/50/000000/moon-symbol.png");
 }
